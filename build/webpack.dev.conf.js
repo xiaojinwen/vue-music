@@ -67,6 +67,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         })
       })
       app.get('/api/getMusic', (req, res) => {
+        // const url = 'https://u.y.qq.com/cgi-bin/musicu.fcg?_=1524151611827'
+        // 1524152008919
+        // https://u.y.qq.com/cgi-bin/musicu.fcg?_=1524152080859
         const url = 'https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg'
         axios.get(url, {
           headers: {

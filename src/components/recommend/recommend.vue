@@ -44,6 +44,9 @@
   import {playlistMixin} from 'common/js/mixin'
   import {mapMutations} from 'vuex'
 
+  /* eslint-disable no-unused-vars */
+  import vConsole from 'vconsole'
+
   export default {
     mixins: [playlistMixin],
     components: {

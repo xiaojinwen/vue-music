@@ -61,14 +61,17 @@
         // console.log('加载更多')
         getSingerDetail(this.singer.id, NUM, this.begin).then((res) => {
           if (res.code === ERR_OK) {
-            let temp = this._normalizeSongs(res.data.list)
-            setTimeout(() => {
-              this.songs = this.songs.concat(temp)
-              // console.log(temp)
-              // console.log(this.songs)
-              this._checkMore(res.data)
-              this.loaded = true
-            }, 600)
+            this._normalizeSongs(res.data.list)
+            // let temp = this._normalizeSongs(res.data.list)
+            // setTimeout(() => {
+            //   // this.songs = this.songs.concat(temp)
+            //   // console.log(temp)
+            //   // console.log(this.songs)
+            //   this._checkMore(res.data)
+            //   this.loaded = true
+            // }, 1000)
+            this._checkMore(res.data)
+            this.loaded = true
           }
         })
       },
@@ -89,28 +92,32 @@
         this.begin = 0
         getSingerDetail(this.singer.id, NUM, this.begin).then((res) => {
           if (res.code === ERR_OK) {
-            this.songs = this._normalizeSongs(res.data.list)
+            // this.songs = this._normalizeSongs(res.data.list)
+            this._normalizeSongs(res.data.list)
             // console.log(this.songs)
             this._checkMore(res.data)
           }
         })
       },
       _normalizeSongs(list) {
-        let ret = []
+        // let ret = []
         list.forEach((item) => {
           // musicData=item.musicData
           let {musicData} = item
           if (musicData.songid && musicData.albummid) {
-            getMusic(musicData.strMediaMid).then((res) => {
-              if (res.code === ERR_OK) {
+            getMusic(musicData.songmid).then((res) => {
+              if (res.code === ERR_OK && res.data.items[0].subcode === ERR_OK) {
                 // console.log(res.data.items[0])
                 // console.log(res)
-                ret.push(createSong(musicData, res.data.items[0]))
+                // ret.push(createSong(musicData, res.data.items[0]))
+                this.songs = this.songs.concat(createSong(musicData, res.data.items[0]))
+              } else {
+                console.log('获取歌曲链接错误')
               }
             })
           }
         })
-        return ret
+        // return ret
       }
     }
   }

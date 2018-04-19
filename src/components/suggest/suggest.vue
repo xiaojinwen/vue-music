@@ -2,7 +2,10 @@
   <scroll class="suggest"
           :data="result"
           :pullup="pullup"
-          @scrollToEnd="searchMore" ref="suggest">
+          :beforeScroll="beforeScroll"
+          @scrollToEnd="searchMore"
+          @beforeScroll="listScroll"
+          ref="suggest">
     <ul class="suggest-list">
       <li @click.stop.prevent="selectItem(item)" class="suggest-item" v-for="(item,index) in result" :key="index">
         <div class="icon">
@@ -14,6 +17,9 @@
       </li>
       <loading v-show="hasMore" title=""></loading>
     </ul>
+    <div v-show="!hasMore && !result.length" class="no-result-wrapper">
+      <no-result title="抱歉,暂无搜索结果"></no-result>
+    </div>
   </scroll>
 </template>
 
@@ -26,12 +32,14 @@
   import Singer from 'common/js/singer'
   import {mapMutations, mapActions} from 'vuex'
   import {getMusic} from 'api/song'
+  import NoResult from 'base/no-result/no-result'
 
   const TYPE_SINGER = 'TYPE_SINGER'
   const PERPAGE_NUM = 20
 
   export default {
     components: {
+      NoResult,
       Loading,
       Scroll
     },
@@ -51,6 +59,7 @@
         page: 1,
         result: [],
         pullup: true,
+        beforeScroll: true,
         hasMore: true
       }
     },
@@ -113,11 +122,18 @@
               // console.log(res.data.items[0])
               updateUrl(item, res.data.items[0])
               // console.log(res)
-              this.innerSong(item)
+              this.insertSong(item)
             }
           })
           // console.log(item)
         }
+        this.$emit('select')
+      },
+      listScroll() {
+        this.$emit('listScroll')
+      },
+      refresh() {
+        this.$refs.suggest.refresh()
       },
       _checkMore(data) {
         let song = data.song
@@ -162,7 +178,7 @@
         setSinger: 'SET_SINGER'
       }),
       ...mapActions([
-        'innerSong'
+        'insertSong'
       ])
     },
     watch: {

@@ -28,6 +28,15 @@ const mutations = {
   },
   [types.SET_TOPLIST](state, topList) {
     state.topList = topList
+  },
+  [types.SET_SEARCH_HISTORY](state, searchHistory) {
+    state.searchHistory = searchHistory
+  },
+  [types.SET_PLAY_HISTORY](state, playHistory) {
+    state.playHistory = playHistory
+  },
+  [types.SET_FAVORITE_LIST](state, favoriteList) {
+    state.favoriteList = favoriteList
   }
 }
 export default mutations

@@ -6,8 +6,8 @@
           <span :class="getRankCls(index)">{{getRankText(index)}}</span>
         </div>
         <div class="content">
-          <h2 class="name">{{song.name}}</h2>
-          <p class="desc">{{getDesc(song)}}</p>
+          <h2 class="name" v-html="song.name"></h2>
+          <p class="desc" v-html="getDesc(song)"></p>
         </div>
       </li>
       <loading v-show="loadingMore" title=""></loading>

@@ -1,6 +1,11 @@
 # vue-music
 
 > 音乐播放器
+## 展示(无数据)
+ https://xiaojinwen.github.io/vue-music/
+
+## 展示(含数据)
+ http://118.89.45.240:3001/
 
 ## Build Setup
 

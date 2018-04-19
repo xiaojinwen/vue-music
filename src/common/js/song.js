@@ -32,8 +32,7 @@ export default class Song {
     })
   }
 }
-// 'http://dl.stream.qqmusic.qq.com/C400001Qu4I30eVFYb.m4a?vkey=00FF784496BB81E850A7A3E9694B03E3A013C4ED2E0B6E1ABB1D7330C6F668DC04D86403AA4883C406DDDF9D1ECAB510B633A5095FB4FE5A&guid=6416692684&uin=0&fromtag=66'
-// items":[{"subcode":0,"songmid":"001Qu4I30eVFYb","filename":"C400001Qu4I30eVFYb.m4a","vkey":"00FF784496BB81E850A7A3E9694B03E3A013C4ED2E0B6E1ABB1D7330C6F668DC04D86403AA4883C406DDDF9D1ECAB510B633A5095FB4FE5A"
+
 export function createSong(musicData, musicDetail) {
   if (!musicDetail) {
     return new Song({
