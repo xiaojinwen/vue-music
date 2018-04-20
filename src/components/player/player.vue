@@ -60,8 +60,12 @@
               <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon" @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>
+              <i class="micon-more" @click="showM">&#xe627;</i>
             </div>
+
+            <!--<div class="icon i-right">-->
+            <!--<i class="icon" @click="toggleFavorite(currentSong)" :class="getFavoriteIcon(currentSong)"></i>-->
+            <!--</div>-->
           </div>
         </div>
       </div>
@@ -85,9 +89,34 @@
         </div>
       </div>
     </transition>
+    <transition name="up">
+      <div class="more-wrapper" v-if="showMore" @click="hideM">
+        <div class="more">
+          <div class="progress-wrapper">
+          <span class="volume">
+            <i class="micon-volume">&#xe87a;</i>
+          </span>
+            <div class="progress-bar-wrapper">
+              <progress-bar v-if="playList.length>0" @percentChange="onVolumeChange" :percent="volume"></progress-bar>
+            </div>
+          </div>
+          <div class="operators">
+            <div class="icon" @click.stop="download">
+              <i class="micon-download">&#xe794;</i>
+              <div class="text">下载</div>
+            </div>
+            <div class="icon" @click.stop="toggleFavorite(currentSong)">
+              <i class="icon" :class="getFavoriteIcon(currentSong)"></i>
+              <div class="text">收藏</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
     <playlist ref="playlist"></playlist>
     <audio :src="currentSong.url" ref="audio" @play="ready" @error="error" @timeupdate="updateTime"
-           @ended="end">您的浏览器不支持</audio>
+           @ended="end">您的浏览器不支持
+    </audio>
   </div>
 </template>
 
@@ -125,16 +154,16 @@
         currentLyric: null,
         currentLineNum: 0,
         currentShow: 'cd',
-        playingLyric: ''
+        playingLyric: '',
+        showMore: false,
+        volumeNum: 0.3
       }
     },
     created() {
       this.touch = {}
-    //  http://dl.stream.qqmusic.qq.com/C400004U6vgL27a5HJ.m4a?guid=9911179128&vkey=02A05A1AD8FA5E6DE599F450039860BB23079A5E2C5F30FEA2DA7D8F3AC878ADB7CDA2FB7355DC05B324117F8D0E13DA63EA6C1F052273F9&uin=0&fromtag=38
-    //  http://dl.stream.qqmusic.qq.com/C400004U6vgL27a5HJ.m4a?vkey=02A05A1AD8FA5E6DE599F450039860BB23079A5E2C5F30FEA2DA7D8F3AC878ADB7CDA2FB7355DC05B324117F8D0E13DA63EA6C1F052273F9&guid=9911179128&uin=0&fromtag=38
     },
     mounted() {
-      this.$refs.audio.volume = 0.1
+      this.$refs.audio.volume = 0.3
     },
     computed: {
       cdCls() {
@@ -157,6 +186,9 @@
       },
       percent() {
         return this.currentTime / this.currentSong.duration
+      },
+      volume() {
+        return this.volumeNum
       },
       ...mapGetters([
         'fullScreen',
@@ -302,6 +334,14 @@
           this.currentLyric.seek(currentTime * 1000)
         }
       },
+      onVolumeChange(percent, type) {
+        // if (type === 'end') {
+        const p = Math.ceil(percent * 10) / 10
+        this.$refs.audio.volume = p
+        this.volumeNum = percent
+        // console.log(percent)
+        // }
+      },
       getLyric() {
         this.currentSong.getLyric().then((lyric) => {
           if (this.currentSong.lyric !== lyric) {
@@ -331,6 +371,15 @@
       },
       showPlaylist() {
         this.$refs.playlist.show()
+      },
+      showM() {
+        this.showMore = true
+      },
+      hideM() {
+        this.showMore = false
+      },
+      download() {
+        window.open(this.currentSong.url)
       },
       middleTouchStart(e) {
         this.touch.initiated = true
@@ -693,7 +742,66 @@
           position: absolute
           left: 0
           top: 0
+    .more-wrapper
+      position fixed
+      left 0
+      right 0
+      top 0
+      bottom 0
+      z-index 200
+      background-color $color-background-d
+      .more
+        position: absolute
+        left: 0
+        bottom: 0
+        width: 100%
+        background-color: $color-highlight-background
+        max-height: 240px
+        min-height: 80px
+        overflow: hidden
+        .progress-wrapper
+          display: flex
+          align-items: center
+          width: 80%
+          margin: 0px auto
+          padding: 5px 0
+          .volume
+            color: $color-theme
+            flex: 0 0 20px
+            line-height: 40px
+            width: 20px
+            margin-right 10px
+            i
+              font-size: 20px
+          .progress-bar-wrapper
+            flex: 1
+        .operators
+          display flex
+          align-items: center
+          padding-bottom 15px
+          .icon
+            flex: 1
+            text-align: center
+            color: $color-theme
+            padding: 10px
+            &.disable
+              color: $color-theme-d
+            i
+              font-size: 25px
+          .text
+            font-size: $font-size-small
+            margin-top 5px
+          .icon-favorite
+            color: $color-sub-theme
 
+      &.up-enter-active, &.up-leave-active
+        transition opacity 0.3s
+        .more
+          transition all 0.3s
+      &.up-enter, &.up-leave-to
+        opacity: 0
+        .more
+          transform: translate3d(0, 100%, 0)
   @keyframes rotate
     0%
       transform: rotate(0)

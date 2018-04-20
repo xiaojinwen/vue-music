@@ -1,5 +1,5 @@
 <template>
-  <div class="progress-bar" ref="progressBar" @click="progressClick">
+  <div class="progress-bar" ref="progressBar" @click.stop="progressClick">
     <div class="bar-inner">
       <div class="progress" ref="progress"></div>
       <div class="progress-btn-wrapper">
@@ -27,6 +27,13 @@
     created() {
       this.touch = {}
     },
+    mounted() {
+      this.$nextTick(() => {
+        const barWidth = this.$refs.progressBar.clientWidth - progressBtnWidth
+        let offsetWidth = this.percent * barWidth
+        this._offset(offsetWidth)
+      })
+    },
     methods: {
       progressTouchStart(e) {
         this.touch.initiated = true
@@ -48,7 +55,7 @@
       },
       progressClick(e) {
         let rect = this.$refs.progressBar.getBoundingClientRect()
-        let offsetWidth = e.pageX - rect.left
+        let offsetWidth = e.pageX - rect.left - progressBtnWidth / 2
         this._offset(offsetWidth)
         // 这个方法点击相同位置两次时会出错
         // this._offset(e.offsetX)
@@ -79,6 +86,7 @@
 <style lang="stylus" rel="stylesheet/stylus">
   @import "~common/stylus/variable"
   .progress-bar
+    width 100%
     height: 30px
     .bar-inner
       position: relative
