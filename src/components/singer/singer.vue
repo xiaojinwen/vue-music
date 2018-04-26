@@ -1,5 +1,7 @@
 <template>
-  <div class="singer" ref="singer">
+  <div class="singer" ref="singer" @touchstart="touchStart"
+       @touchmove="touchMove"
+       @touchend="touchEnd">
     <list-view :data="singers" @select="selectSinger" ref="list"></list-view>
     <router-view></router-view>
   </div>
@@ -11,13 +13,13 @@
   import Singer from 'common/js/singer'
   import ListView from 'base/listview/listview'
   import {mapMutations} from 'vuex'
-  import {playlistMixin} from 'common/js/mixin'
+  import {playlistMixin, routerMixin} from 'common/js/mixin'
 
   const HOT_NAME = '热门'
   const HOT_SINGER_LEN = 10
 
   export default {
-    mixins: [playlistMixin],
+    mixins: [playlistMixin, routerMixin],
     name: 'singer',
     components: {
       ListView

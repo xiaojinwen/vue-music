@@ -61,6 +61,7 @@ export default new Router({
     },
     {
       path: '/recommend',
+      name: 1,
       component: Recommend,
       children: [{
         path: ':id',
@@ -69,6 +70,7 @@ export default new Router({
     },
     {
       path: '/singer',
+      name: 2,
       component: Singer,
       children: [
         {
@@ -79,6 +81,7 @@ export default new Router({
     },
     {
       path: '/rank',
+      name: 3,
       component: Rank,
       children: [
         {
@@ -89,6 +92,7 @@ export default new Router({
     },
     {
       path: '/search',
+      name: 4,
       component: Search,
       children: [
         {

@@ -28,6 +28,10 @@
       interval: {
         type: Number,
         default: 3000
+      },
+      canChange: {
+        type: Boolean,
+        default: true
       }
     },
     data() {
@@ -53,15 +57,22 @@
         this.slider.refresh()
       })
     },
+    activated() {
+      if (this.autoPlay) {
+        this._play()
+      }
+    },
     methods: {
       _play() {
-        let pageIndex = this.currentPageIndex + 1
-        if (this.loop) {
-          pageIndex += 1
+        if (this.canChange) {
+          let pageIndex = this.currentPageIndex + 1
+          if (this.loop) {
+            pageIndex += 1
+          }
+          this.timer = setTimeout(() => {
+            this.slider.goToPage(pageIndex, 0, 400)
+          }, this.interval)
         }
-        this.timer = setTimeout(() => {
-          this.slider.goToPage(pageIndex, 0, 400)
-        }, this.interval)
       },
       _setSliderWidth(isResize) {
         this.children = this.$refs.sliderGroup.children
@@ -92,20 +103,43 @@
           snapSpeed: 400,
           click: true
         })
-        this.slider.on('scrollEnd', () => {
-          let pageIndex = this.slider.getCurrentPage().pageX
-          if (this.loop) {
-            pageIndex -= 1
-          }
-          this.currentPageIndex = pageIndex
+        if (this.canChange) {
+          this.slider.on('scrollEnd', () => {
+            let pageIndex = this.slider.getCurrentPage().pageX
+            if (this.loop) {
+              pageIndex -= 1
+            }
+            this.currentPageIndex = pageIndex
+            if (this.autoPlay) {
+              clearTimeout(this.timer)
+              this._play()
+            }
+          })
+        }
+      }
+    },
+    watch: {
+      canChange(newVal, oldVal) {
+        // console.log(newVal)
+        if (!newVal) {
+          clearTimeout(this.timer)
+        } else {
           if (this.autoPlay) {
-            clearTimeout(this.timer)
             this._play()
           }
-        })
+          // if (this.t) {
+          //   clearTimeout(this.t)
+          // }
+          // this.t = setTimeout(() => {
+          //
+          // }, 100)
+        }
       }
     },
     destroyed() {
+      clearTimeout(this.timer)
+    },
+    deactivated() {
       clearTimeout(this.timer)
     }
   }

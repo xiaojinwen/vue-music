@@ -9,7 +9,6 @@
 <script type="text/ecmascript-6">
   import {mapGetters} from 'vuex'
   import {getSingerDetail} from 'api/singer'
-  import {getMusic} from 'api/song'
   import {ERR_OK} from 'api/config'
   import {createSong} from 'common/js/song'
   import MusicList from 'components/music-list/music-list'
@@ -46,6 +45,10 @@
     },
     created() {
       this._getDetail()
+      // clearTimeout(this.timer)
+      // this.timer = setTimeout(() => {
+      //
+      // }, 600)
       // console.log(this.singer)
     },
     methods: {
@@ -61,7 +64,8 @@
         // console.log('加载更多')
         getSingerDetail(this.singer.id, NUM, this.begin).then((res) => {
           if (res.code === ERR_OK) {
-            this._normalizeSongs(res.data.list)
+            // this._normalizeSongs(res.data.list)
+            this.songs = this.songs.concat(this._normalizeSongs(res.data.list))
             // let temp = this._normalizeSongs(res.data.list)
             // setTimeout(() => {
             //   // this.songs = this.songs.concat(temp)
@@ -92,32 +96,33 @@
         this.begin = 0
         getSingerDetail(this.singer.id, NUM, this.begin).then((res) => {
           if (res.code === ERR_OK) {
-            // this.songs = this._normalizeSongs(res.data.list)
-            this._normalizeSongs(res.data.list)
+            this.songs = this._normalizeSongs(res.data.list)
+            // this._normalizeSongs(res.data.list)
             // console.log(this.songs)
             this._checkMore(res.data)
           }
         })
       },
       _normalizeSongs(list) {
-        // let ret = []
+        let ret = []
         list.forEach((item) => {
           // musicData=item.musicData
           let {musicData} = item
           if (musicData.songid && musicData.albummid) {
-            getMusic(musicData.songmid).then((res) => {
-              if (res.code === ERR_OK && res.data.items[0].subcode === ERR_OK) {
-                // console.log(res.data.items[0])
-                // console.log(res)
-                // ret.push(createSong(musicData, res.data.items[0]))
-                this.songs = this.songs.concat(createSong(musicData, res.data.items[0]))
-              } else {
-                console.log('获取歌曲链接错误')
-              }
-            })
+            // getMusic(musicData.songmid).then((res) => {
+            //   if (res.code === ERR_OK && res.data.items[0].subcode === ERR_OK) {
+            //     // console.log(res.data.items[0])
+            //     // console.log(res)
+                ret.push(createSong(musicData, null))
+            //     this.songs = this.songs.concat(createSong(musicData, res.data.items[0]))
+            //   } else {
+            //     console.log('获取歌曲链接错误')
+            //   }
+            // })
+            // this.songs = this.songs.concat(createSong(musicData, null))
           }
         })
-        // return ret
+        return ret
       }
     }
   }

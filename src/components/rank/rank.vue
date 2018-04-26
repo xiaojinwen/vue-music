@@ -1,5 +1,7 @@
 <template>
-  <div class="rank" ref="rank">
+  <div class="rank" ref="rank" @touchstart="touchStart"
+       @touchmove="touchMove"
+       @touchend="touchEnd">
     <scroll class="toplist" :data="topList" ref="topList">
       <ul>
         <li @click="selectItem(item)" class="item" v-for="(item,index) in topList" :key="index">
@@ -28,11 +30,11 @@
   import {ERR_OK} from 'api/config'
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
-  import {playlistMixin} from 'common/js/mixin'
+  import {playlistMixin, routerMixin} from 'common/js/mixin'
   import {mapMutations} from 'vuex'
 
   export default {
-    mixins: [playlistMixin],
+    mixins: [playlistMixin, routerMixin],
     components: {
       Loading,
       Scroll

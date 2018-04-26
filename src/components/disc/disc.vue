@@ -10,7 +10,6 @@
   import {getSongList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
   import {createSong} from 'common/js/song'
-  import {getMusic} from 'api/song'
 
   export default {
     components: {MusicList},
@@ -32,7 +31,12 @@
       ])
     },
     created() {
-      this._getSongList()
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
+      this.timer = setTimeout(() => {
+        this._getSongList()
+      }, 300)
       // console.log(this.disc)
     },
     methods: {
@@ -50,13 +54,7 @@
         let ret = []
         list.forEach((musicData) => {
           if (musicData.songid && musicData.albumid) {
-            getMusic(musicData.strMediaMid).then((res) => {
-              if (res.code === ERR_OK) {
-                // console.log(res.data.items[0])
-                // console.log(res)
-                ret.push(createSong(musicData, res.data.items[0]))
-              }
-            })
+            ret.push(createSong(musicData, null))
           }
         })
         return ret

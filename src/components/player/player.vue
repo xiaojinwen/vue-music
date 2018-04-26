@@ -347,8 +347,9 @@
           if (this.currentSong.lyric !== lyric) {
             return
           }
+
           this.currentLyric = new Lyric(lyric, this.handleLyric)
-          if (this.playing) {
+          if (this.playing && this.songReady) {
             this.currentLyric.play()
           }
           // console.log(this.currentLyric)
@@ -802,6 +803,7 @@
         opacity: 0
         .more
           transform: translate3d(0, 100%, 0)
+
   @keyframes rotate
     0%
       transform: rotate(0)

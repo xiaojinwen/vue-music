@@ -1,5 +1,7 @@
 <template>
-  <div class="search" ref="search">
+  <div class="search" ref="search" @touchstart="touchStart"
+       @touchmove="touchMove"
+       @touchend="touchEnd">
     <div class="search-box-wrapper">
       <search-box @query="onQueryChange" ref="searchBox"></search-box>
     </div>
@@ -38,13 +40,13 @@
   import {ERR_OK} from 'api/config'
   import Suggest from 'components/suggest/suggest'
   import {mapActions} from 'vuex'
-  import {playlistMixin, searchMixin} from 'common/js/mixin'
+  import {playlistMixin, searchMixin, routerMixin} from 'common/js/mixin'
   import SearchList from 'base/search-list/search-list'
   import Confirm from 'base/confirm/confirm'
   import Scroll from 'base/scroll/scroll'
 
   export default {
-    mixins: [playlistMixin, searchMixin],
+    mixins: [playlistMixin, searchMixin, routerMixin],
     name: 'search',
     components: {
       Confirm,
@@ -80,13 +82,12 @@
     },
     methods: {
       handlePlaylist(playlist) {
-        const bottom = playlist.length > 0 ? '60px' : ''
+        const bottom = playlist.length > 0 ? '60px' : '0'
         this.$refs.shortcutWrapper.style.bottom = bottom
         this.$refs.shortcut.refresh()
         this.$refs.result.style.bottom = bottom
         this.$refs.suggest.refresh()
       },
-
       showConfirm() {
         this.$refs.confirm.show()
       },
@@ -119,10 +120,11 @@
     .search-box-wrapper
       margin: 0px 0
     .shortcut-wrapper
-      position: fixed
-      top: 148px
+      position: absolute
+      top: 40px
       bottom: 0
       width: 100%
+      margin-top 15px
       .shortcut
         height: 100%
         overflow: hidden
@@ -157,8 +159,8 @@
                 font-size: $font-size-medium
                 color: $color-text-d
     .search-result
-      position: fixed
+      position: absolute
       width: 100%
-      top: 148px
+      top: 60px
       bottom: 0
 </style>

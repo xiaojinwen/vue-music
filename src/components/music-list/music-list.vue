@@ -35,6 +35,9 @@
   import Loading from 'base/loading/loading'
   import {mapActions} from 'vuex'
   import {playlistMixin} from 'common/js/mixin'
+  import {ERR_OK} from 'api/config'
+  import {getMusic} from 'api/song'
+  import {updateUrl} from 'common/js/song'
   // import {deepClone} from 'common/js/util'
 
   const RESERVED_HEIGHT = 40
@@ -104,14 +107,19 @@
         this.$router.back()
       },
       selectItem(item, index) {
-        // let cSongs = deepClone(this.songs)
-        this.selectPlay({
-          list: this.songs,
-          index
+        getMusic(item.mid).then((res) => {
+          if (res.code === ERR_OK) {
+            // console.log(res.data.items[0])
+            updateUrl(item, res.data.items[0])
+            // console.log(res)
+            this.selectPlay({
+              list: this.songs,
+              index
+            })
+          }
         })
       },
       random() {
-        // let cSongs = deepClone(this.songs)
         this.randomPlay({
           list: this.songs
         })

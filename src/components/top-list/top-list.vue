@@ -10,7 +10,6 @@
   import {getMusicList} from 'api/rank'
   import {ERR_OK} from 'api/config'
   import {createSong} from 'common/js/song'
-  import {getMusic} from 'api/song'
 
   export default {
     components: {MusicList},
@@ -36,7 +35,12 @@
       ])
     },
     created() {
-      this._getMusicList()
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
+      this.timer = setTimeout(() => {
+        this._getMusicList()
+      }, 300)
     },
     methods: {
       _getMusicList() {
@@ -55,13 +59,15 @@
           const musicData = item.data
           // console.log(musicData)
           if (musicData.songid && musicData.albumid) {
-            getMusic(musicData.strMediaMid).then((res) => {
-              if (res.code === ERR_OK) {
-                // console.log(res.data.items[0])
-                // console.log(res)
-                ret.push(createSong(musicData, res.data.items[0]))
-              }
-            })
+            // 选择播放歌曲时才获取播放链接
+            ret.push(createSong(musicData, null))
+            // getMusic(musicData.strMediaMid).then((res) => {
+            //   if (res.code === ERR_OK) {
+            //     // console.log(res.data.items[0])
+            //     // console.log(res)
+            //     ret.push(createSong(musicData, res.data.items[0]))
+            //   }
+            // })
           }
         })
         return ret
@@ -75,6 +81,5 @@
     transition all 0.3s
 
   .slide-enter, .slide-leave-to
-    /*left 100%*/
     transform translate3d(100%, 0, 0)
 </style>
