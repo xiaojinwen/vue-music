@@ -1,7 +1,8 @@
 import * as types from './mutation-types'
 import {playMode} from 'common/js/config'
-import {shuffle} from 'common/js/util'
+import {shuffle, deepClone} from 'common/js/util'
 import {saveSearch, deleteSearch, clearSearch, savePlayHistory, saveFavorite, deleteFavorite} from 'common/js/cache'
+import Song from 'common/js/song'
 function findIndex(list, song) {
   return list.findIndex((item) => {
     return item.id === song.id
@@ -18,6 +19,26 @@ export const selectPlay = function ({commit, state}, {list, index}) {
     commit(types.SET_PLAYLIST, list)
   }
   commit(types.SET_CURRENT_INDEX, index)
+  commit(types.SET_FULL_SCREEN, true)
+  commit(types.SET_PLAYING_STATE, true)
+}
+
+export const updateUrl = function ({commit, state}, {url}) {
+  let playList = deepClone(state.playList)
+  let sequenceList = deepClone(state.sequenceList)
+  let currentIndex = deepClone(state.currentIndex)
+  // 修改url
+  playList[currentIndex].url = url
+  sequenceList[currentIndex].url = url
+  playList.forEach((item) => {
+    // console.log(item)
+    return new Song(item)
+  })
+  sequenceList.forEach((item) => {
+    return new Song(item)
+  })
+  commit(types.SET_PLAYLIST, playList)
+  commit(types.SET_SEQUENCE_LIST, sequenceList)
   commit(types.SET_FULL_SCREEN, true)
   commit(types.SET_PLAYING_STATE, true)
 }

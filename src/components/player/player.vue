@@ -132,8 +132,10 @@
   import Scroll from 'base/scroll/scroll'
   import Playlist from 'components/playlist/playlist'
   import {playerMixin} from 'common/js/mixin'
-  // import {ERR_OK} from 'api/config'
-  // import {getMusic} from 'api/song'
+  import {ERR_OK} from 'api/config'
+  import {getMusic} from 'api/song'
+  import Song from 'common/js/song'
+  // import {updateUrl} from 'common/js/song'
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
@@ -343,11 +345,10 @@
         // }
       },
       getLyric() {
-        this.currentSong.getLyric().then((lyric) => {
-          if (this.currentSong.lyric !== lyric) {
-            return
-          }
-
+        new Song(this.currentSong).getLyric().then((lyric) => {
+          // if (this.currentSong.lyric !== lyric) {
+          //   return
+          // }
           this.currentLyric = new Lyric(lyric, this.handleLyric)
           if (this.playing && this.songReady) {
             this.currentLyric.play()
@@ -381,6 +382,15 @@
       },
       download() {
         window.open(this.currentSong.url)
+      },
+      playInit() {
+        if (this.timer) {
+          clearTimeout(this.timer)
+        }
+        this.timer = setTimeout(() => {
+          this.getLyric()
+          this.$refs.audio.play()
+        }, 500)
       },
       middleTouchStart(e) {
         this.touch.initiated = true
@@ -467,6 +477,7 @@
       },
       ...mapActions([
         'loopPlay',
+        'updateUrl',
         'setPlayHistory'
       ]),
       ...mapMutations({
@@ -491,11 +502,22 @@
         if (this.currentLyric) {
           this.currentLyric.stop()
         }
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          this.$refs.audio.play()
-          this.getLyric()
-        }, 500)
+        if (!this.currentSong.url) {
+          getMusic(this.currentSong.mid).then((res) => {
+            if (res.code === ERR_OK) {
+              // console.log(res.data.items[0])
+              // updateUrl(this.currentSong, res.data.items[0])
+              // console.log(res)
+              let musicDetail = res.data.items[0]
+              this.updateUrl({
+                url: `http://dl.stream.qqmusic.qq.com/${musicDetail.filename}?vkey=${musicDetail.vkey}&guid=6416692684&uin=0&fromtag=66`
+              })
+              this.playInit()
+            }
+          })
+        } else {
+          this.playInit()
+        }
       },
       playing(newPlaying) {
         const audio = this.$refs.audio
