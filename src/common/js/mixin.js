@@ -163,7 +163,8 @@ export const routerMixin = {
       const touch = e.touches[0]
       this.touch.startX = touch.pageX
       this.touch.startY = touch.pageY
-      // console.log('touchStart')
+      // console.log('touchStart ->')
+      // console.log(this.touch)
     },
     touchMove(e) {
       if (!this.touch.initiated) {
@@ -175,8 +176,9 @@ export const routerMixin = {
       const deltaX = touch.pageX - this.touch.startX
       this.touch.deltaX = deltaX
       const deltaY = touch.pageY - this.touch.startY
-      // console.log(deltaX)
-      if (Math.abs(deltaY) > Math.abs(deltaX)) {
+      // console.log('deltaX ' + deltaX)
+      // console.log('deltaY ' + deltaY)
+      if (Math.abs(deltaY) * 1.5 > Math.abs(deltaX)) {
         return
       }
       // console.log(deltaX)
@@ -186,17 +188,19 @@ export const routerMixin = {
       // console.log(this.touch.percent)
     },
     touchEnd(e) {
-      if (!this.touch.moved) {
+      if (!this.touch.moved || !this.touch.percent || this.touch.percent === 1) {
         return
       }
       this.touch.moved = false
-      // console.log(this.touch.percent)
+      // console.log('比例' + this.touch.percent)
       if (this.touch.deltaX < 0) {
+        // console.log('x小于0')
         if (this.touch.percent > 0.2) {
           // console.log(this.$route.name + 1)
           this.changeRouter(1)
         }
       } else {
+        // console.log('x大于0')
         if (this.touch.percent < 0.8) {
           // console.log(this.$route.name - 1)
           this.changeRouter(-1)

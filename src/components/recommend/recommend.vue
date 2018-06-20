@@ -71,6 +71,12 @@
       this._getRecommend()
       this._getDiscList()
     },
+    // activated() {
+    //   this.canChange = true
+    // },
+    // deactivated() {
+    //   this.canChange = false
+    // },
     methods: {
       handlePlaylist(playlist) {
         const bottom = playlist.length > 0 ? '60px' : ''
@@ -92,6 +98,7 @@
       },
       canTouchEnd(e) {
         this.touchEnd(e)
+        this.canChange = true
       },
       scroll() {
         this.canChange = false

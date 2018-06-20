@@ -11,6 +11,7 @@
           </div>
           <h1 class="title" v-html="currentSong.name"></h1>
           <h2 class="subtitle" v-html="currentSong.singer"></h2>
+          <div class="fix-bug" @click="fixBug">不能播放点击?</div>
         </div>
         <div class="middle" @touchstart.prevent="middleTouchStart"
              @touchmove.prevent="middleTouchMove"
@@ -161,6 +162,12 @@
         volumeNum: 0.3
       }
     },
+    // beforeCreate() {
+    //   // hack for global nextTick
+    //   function noop() { }
+    //   window.MessageChannel = noop
+    //   window.setImmediate = noop
+    // },
     created() {
       this.touch = {}
     },
@@ -244,6 +251,7 @@
         this.$refs.cdWrapper.style[transform] = ''
       },
       togglePlaying() {
+        this.fixBug()
         if (!this.songReady) {
           return
         }
@@ -251,6 +259,14 @@
         if (this.currentLyric) {
           this.currentLyric.togglePlay()
         }
+        // if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+        //
+        // } else if (/(Android)/i.test(navigator.userAgent) || navigator.userAgent === '') {
+        //   console.info('播放按钮')
+        //   this.playInit()
+        // } else {
+        //
+        // }
       },
       end() {
         if (this.mode === playMode.loop) {
@@ -309,10 +325,12 @@
       },
       ready() {
         this.songReady = true
+        // console.info('歌曲 ready')
         this.setPlayHistory(this.currentSong)
       },
       error() {
         this.songReady = true
+        // console.info('歌曲 errer')
       },
       updateTime(e) {
         this.currentTime = e.target.currentTime
@@ -374,6 +392,34 @@
       showPlaylist() {
         this.$refs.playlist.show()
       },
+      fixBug() {
+        if (!this.one) {
+          // console.info(navigator.platform)
+          // 平台、设备和操作系统
+          var system = {
+            win: false,
+            mac: false,
+            xll: false
+          }
+          // 检测平台
+          var p = navigator.platform
+          system.win = p.indexOf('Win') === 0
+          system.mac = p.indexOf('Mac') === 0
+          system.x11 = (p === 'X11') || (p.indexOf('Linux') === 0)
+          // 跳转语句
+          if (system.win || system.mac || system.xll) {
+            // console.info('pc')
+          } else {
+            // console.info('移动')
+            if (this.currentLyric) {
+              this.currentLyric.stop()
+            }
+            this.$refs.audio.play()
+            this.setPlayingState(!this.playing)
+          }
+          this.one = true
+        }
+      },
       showM() {
         this.showMore = true
       },
@@ -390,7 +436,7 @@
         this.timer = setTimeout(() => {
           this.getLyric()
           this.$refs.audio.play()
-        }, 500)
+        }, 200)
       },
       middleTouchStart(e) {
         this.touch.initiated = true
@@ -490,9 +536,9 @@
     },
     watch: {
       currentSong(newSong, oldSong) {
-        // if (!newSong.id) {
-        //   return
-        // }
+        if (!newSong.id) {
+          return
+        }
         if (newSong.id === oldSong.id) {
           return
         }
@@ -502,16 +548,18 @@
         if (this.currentLyric) {
           this.currentLyric.stop()
         }
-        if (!this.currentSong.url) {
-          getMusic(this.currentSong.mid).then((res) => {
+        if (!newSong.url) {
+          getMusic(newSong.mid).then((res) => {
             if (res.code === ERR_OK) {
               // console.log(res.data.items[0])
               // updateUrl(this.currentSong, res.data.items[0])
               // console.log(res)
               let musicDetail = res.data.items[0]
+              let url = `http://dl.stream.qqmusic.qq.com/${musicDetail.filename}?vkey=${musicDetail.vkey}&guid=6416692684&uin=0&fromtag=66`
               this.updateUrl({
-                url: `http://dl.stream.qqmusic.qq.com/${musicDetail.filename}?vkey=${musicDetail.vkey}&guid=6416692684&uin=0&fromtag=66`
+                url: url
               })
+              // this.$refs.audio.src = url
               this.playInit()
             }
           })
@@ -521,9 +569,15 @@
       },
       playing(newPlaying) {
         const audio = this.$refs.audio
-        this.$nextTick(() => {
+        // this.$nextTick(() => {
+        //   newPlaying ? audio.play() : audio.pause()
+        // })
+        if (this.timer1) {
+          clearTimeout(this.timer1)
+        }
+        this.timer1 = setTimeout(() => {
           newPlaying ? audio.play() : audio.pause()
-        })
+        }, 200)
       }
     }
   }
@@ -578,6 +632,12 @@
           text-align: center
           font-size: $font-size-medium
           color: $color-text
+        .fix-bug
+          font-size 12px
+          position absolute
+          top: 10px
+          right: 6px
+          z-index: 50
       .middle
         position: fixed
         width: 100%
@@ -625,7 +685,7 @@
               height: 20px
               line-height: 20px
               font-size: $font-size-medium
-              color: $color-text-l
+              color: $color-text
         .middle-r
           display: inline-block
           vertical-align: top
@@ -645,7 +705,7 @@
                 color: $color-text
       .bottom
         position: absolute
-        bottom: 50px
+        bottom: 30px
         width: 100%
         .dot-wrapper
           text-align: center

@@ -37,6 +37,7 @@
     data() {
       return {
         dots: [],
+        left: false,
         currentPageIndex: 0
       }
     },
@@ -59,18 +60,20 @@
     },
     activated() {
       if (this.autoPlay) {
+        this.left = false
         this._play()
       }
     },
     methods: {
       _play() {
-        if (this.canChange) {
+        if (this.canChange && !this.left) {
           let pageIndex = this.currentPageIndex + 1
           if (this.loop) {
             pageIndex += 1
           }
           this.timer = setTimeout(() => {
             this.slider.goToPage(pageIndex, 0, 400)
+            // console.log(pageIndex + ' 播放')
           }, this.interval)
         }
       },
@@ -125,22 +128,19 @@
           clearTimeout(this.timer)
         } else {
           if (this.autoPlay) {
+            clearTimeout(this.timer)
             this._play()
           }
-          // if (this.t) {
-          //   clearTimeout(this.t)
-          // }
-          // this.t = setTimeout(() => {
-          //
-          // }, 100)
         }
       }
     },
     destroyed() {
       clearTimeout(this.timer)
+      this.left = true
     },
     deactivated() {
       clearTimeout(this.timer)
+      this.left = true
     }
   }
 </script>
