@@ -102,10 +102,11 @@
             </div>
           </div>
           <div class="operators">
-            <div class="icon" @click.stop="download">
+            <a class="icon" :href="currentSong.url" target="_blank" @click.stop="download"
+               :download="currentSong.name+'-'+currentSong.singer+'.m4a'">
               <i class="micon-download">&#xe794;</i>
-              <div class="text">下载</div>
-            </div>
+              <div class="text">{{currentSong.name+'-'+currentSong.singer+'.m4a'}}</div>
+            </a>
             <div class="icon" @click.stop="toggleFavorite(currentSong)">
               <i class="icon" :class="getFavoriteIcon(currentSong)"></i>
               <div class="text">收藏</div>
@@ -427,7 +428,9 @@
         this.showMore = false
       },
       download() {
-        window.open(this.currentSong.url)
+        // console.log('点击a')
+        // download(this.currentSong.url, 'vue-router.m4a')
+        // window.open(this.currentSong.url)
       },
       playInit() {
         if (this.timer) {
