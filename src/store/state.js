@@ -2,18 +2,19 @@ import {playMode} from 'common/js/config'
 import {loadSearch, loadPlayHistory, loadFavorite} from 'common/js/cache'
 
 const state = {
-  singer: {},
-  playing: false,
-  fullScreen: false,
-  playList: [],
-  sequenceList: [],
-  mode: playMode.sequence,
-  currentIndex: -1,
-  disc: {},
-  topList: {},
-  searchHistory: loadSearch(),
-  playHistory: loadPlayHistory(),
-  favoriteList: loadFavorite()
+    singer: {},
+    playing: false,
+    fullScreen: false,
+    playList: [],
+    sequenceList: [],
+    mode: playMode.sequence,
+    currentIndex: -1,
+    disc: {},
+    topList: {},
+    searchHistory: loadSearch(),
+    playHistory: loadPlayHistory(),
+    favoriteList: loadFavorite(),
+    musicQuality: localStorage.getItem('__musicQuality__')
 }
 
 export default state

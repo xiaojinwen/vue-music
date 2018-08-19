@@ -114,7 +114,7 @@
             //   if (res.code === ERR_OK && res.data.items[0].subcode === ERR_OK) {
             //     // console.log(res.data.items[0])
             //     // console.log(res)
-            ret.push(createSong(musicData, null))
+            ret.push(createSong(musicData, null, null))
             //     this.songs = this.songs.concat(createSong(musicData, res.data.items[0]))
             //   } else {
             //     console.log('获取歌曲链接错误')

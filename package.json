@@ -8,14 +8,13 @@
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "lint": "eslint --ext .js,.vue src",
+    "lintFix": "eslint --fix .js,.vue src",
     "build": "node build/build.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "babel-runtime": "^6.26.0",
     "better-scroll": "^0.2.4",
     "create-keyframe-animation": "^0.1.0",
-    "element-ui": "^2.3.8",
     "fastclick": "^1.0.6",
     "good-storage": "^1.0.1",
     "js-base64": "^2.4.3",
@@ -31,6 +30,7 @@
     "autoprefixer": "^7.1.2",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
+    "babel-runtime": "^6.26.0",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "babel-loader": "^7.1.1",
     "babel-plugin-syntax-jsx": "^6.18.0",

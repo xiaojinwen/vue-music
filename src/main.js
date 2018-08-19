@@ -10,19 +10,19 @@ import 'common/stylus/index.styl'
 import VConsole from 'vconsole'
 
 if (process.env.NODE_ENV !== 'production') {
-  let vConsole = new VConsole()
+    let vConsole = new VConsole()
 }
 // 手机调试vConsole
 
 Vue.config.productionTip = false
 fastclick.attach(document.body)
 Vue.use(VueLazyLoad, {
-  loading: require('common/image/default.png')
+    loading: require('common/image/default.png')
 })
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  render: h => h(App)
+    el: '#app',
+    router,
+    store,
+    render: h => h(App)
 })
