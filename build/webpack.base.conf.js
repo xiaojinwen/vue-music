@@ -94,12 +94,12 @@ module.exports = {
         child_process: 'empty'
     },
     externals: {
+        // "vconsole": "VConsole",
         'vue': 'Vue',
         'vue-router': 'VueRouter',
         'vuex': 'Vuex',
         'axios': 'axios',
-        "fastclick": "fastclick",
-        "vconsole": "vconsole",
-        "vue-lazyload": "vueLazyload"
+        "fastclick": "FastClick",
+        "vue-lazyload": "VueLazyload"
     }
 }

@@ -98,6 +98,31 @@ app.get('/api/getTopList', (req, res) => {
     console.log('错误: ' + e)
   })
 })
+app.get('/api/search', (req, res) => {
+    const url = 'https://c.y.qq.com/soso/fcgi-bin/search_for_qq_cp'
+
+    axios.get(url, {
+        headers: {
+            referer: 'https://c.y.qq.com/',
+            host: 'c.y.qq.com'
+        },
+        params: req.query
+    }).then((response) => {
+        var ret = response.data
+        // console.log(typeof ret === 'string')
+        if (typeof ret === 'string') {
+            var reg = /^\w+\(({[^()]+})\)$/
+            var mathes = ret.match(reg)
+            if (mathes) {
+                ret = JSON.parse(mathes[1])
+                // console.log(ret)
+            }
+        }
+        res.json(ret)
+    }).catch((e) => {
+        console.log('错误: ' + e)
+    })
+})
 //指定启动服务器到哪个文件夹，我这边指的是dist文件夹
 app.use(express.static('dist'));
 

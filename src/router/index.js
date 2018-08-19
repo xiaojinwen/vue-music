@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-
+import VueRouter from 'vue-router'
 // import Recommend from 'components/recommend/recommend'
 // import Singer from 'components/singer/singer'
 // import Rank from 'components/rank/rank'
@@ -9,8 +8,7 @@ import Router from 'vue-router'
 // import Disc from 'components/disc/disc'
 // import TopList from 'components/top-list/top-list'
 // import UserCenter from 'components/user-center/user-center'
-
-Vue.use(Router)
+Vue.use(VueRouter)
 
 const Recommend = (resolve) => {
   import('components/recommend/recommend').then((module) => {
@@ -53,7 +51,7 @@ const UserCenter = (resolve) => {
   })
 }
 
-export default new Router({
+export default new VueRouter({
   routes: [
     {
       path: '/',

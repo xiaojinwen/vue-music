@@ -6,7 +6,7 @@
  https://xiaojinwen.github.io/vue-music/
 
 ## 展示(含数据)
- http://118.89.45.240:3001/
+ http://119.29.143.126:3001
 
 ### 修复bugs
 1. 修复首页路由touch切换bug
