@@ -6,7 +6,7 @@
  https://xiaojinwen.github.io/vue-music/
 
 ## 展示(含数据)
- http://119.29.143.126:3001
+ http://web.xiaojw.xyz/music
 
 ### 修复bugs
 1. 修复首页路由touch切换bug
@@ -14,6 +14,10 @@
 3. 修复轮播图中某些情况下不能自动播放
 4. 其他修复
 
+### bug 不能播放音乐
+    qq音乐接口对ip做了限制
+    线上有时拿不到vkey,可以用代理解决
+    本地没有问题
 ## Build Setup
 
 ``` bash
@@ -29,5 +33,3 @@ npm run build
 # build for production and view the bundle analyzer report
 npm run build --report
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
