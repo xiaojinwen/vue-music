@@ -2,13 +2,14 @@ import axios from 'axios'
 
 const {hostname} = window.location
 const API_HOST = (() => {
-    if (hostname === 'localhost') {
-        // return 'https://xiaojinwen.github.io/vue-music/api'
-        return 'http://web.xiaojw.xyz/api'
-    } else if (hostname === 'xiaojinwen.github.io') {
-        return 'https://xiaojinwen.github.io/vue-music/api'
-    }
-    return `/api`
+    // 这里写线上部署的地址 转接qq接口的地址
+    // if (hostname === 'localhost') {
+    //     // return 'https://xiaojinwen.github.io/vue-music/api'
+    //     return 'http://web.xiaojw.xyz/api'
+    // } else if (hostname === 'xiaojinwen.github.io') {
+    //     return 'https://xiaojinwen.github.io/vue-music/api'
+    // }
+    return `/api` // 本地代理
 })()
 
 const instance = axios.create({

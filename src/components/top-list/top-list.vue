@@ -1,18 +1,21 @@
 <template>
-  <transition name="slide">
-    <music-list :rank="rank" :songs="songs" :title="title" :bgImage="bgImage"></music-list>
-  </transition>
+  <div>
+    <transition name="slide">
+      <music-list :rank="rank" :songs="songs" :title="title" :bgImage="bgImage"></music-list>
+    </transition>
+  </div>
+
 </template>
 
 <script type="text/ecmascript-6">
   import MusicList from 'components/music-list/music-list'
-  import {mapGetters} from 'vuex'
-  import {getMusicList} from 'api/rank'
-  import {ERR_OK} from 'api/config'
-  import {createSong} from 'common/js/song'
+  import { mapGetters } from 'vuex'
+  import { getMusicList } from 'api/rank'
+  import { ERR_OK } from 'api/config'
+  import { createSong } from 'common/js/song'
 
   export default {
-    components: {MusicList},
+    components: { MusicList },
     name: 'top-list',
     data() {
       return {
@@ -54,7 +57,7 @@
         })
       },
       _normalizeSongs(list) {
-        let ret = []
+        const ret = []
         list.forEach((item) => {
           const musicData = item.data
           // console.log(musicData)

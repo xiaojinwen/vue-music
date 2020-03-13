@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+  <title>音乐播放器</title>
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vue-lazyload/1.2.6/vue-lazyload.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-router/3.0.1/vue-router.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>-->
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/vConsole/3.2.0/vconsole.min.js"></script>-->
+</head>
+<body>
+<div id="app"></div>
+<script>
+  function isIE() { //ie?
+    if (!!window.ActiveXObject || "ActiveXObject" in window)
+      return true;
+    else
+      return false;
+  }
+
+  if (isIE()) {
+    console.log('isIE');
+    document.write("<script src='https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.26.0/polyfill.min.js'><" + '/' + "script>");
+    document.write("<script src='https://cdnjs.cloudflare.com/ajax/libs/url-search-params/1.0.2/url-search-params.js'><" + '/' + "script>");
+  }
+</script>
+<!-- built files will be auto injected -->
+</body>
+</html>

@@ -1,5 +1,5 @@
 <template>
-    <div class="player" v-show="playList.length>0">
+    <div class="player" v-show="playList.length">
         <transition name="normal" @enter="enter" @after-enter="afterEnter" @leave="leave" @after-leave="afterLeave">
             <div class="normal-player" v-show="fullScreen">
                 <div class="background">
@@ -98,7 +98,7 @@
             <i class="micon-volume">&#xe87a;</i>
           </span>
                         <div class="progress-bar-wrapper">
-                            <progress-bar v-if="playList.length>0" @percentChange="onVolumeChange"
+                            <progress-bar v-if="playList.length" @percentChange="onVolumeChange"
                                           :percent="volume"></progress-bar>
                         </div>
                     </div>
@@ -129,19 +129,19 @@
 </template>
 
 <script type="text/ecmascript-6">
-    import {mapGetters, mapMutations, mapActions} from 'vuex'
+    import { mapGetters, mapMutations, mapActions } from 'vuex'
     import animations from 'create-keyframe-animation'
-    import {prefixStyle} from 'common/js/dom'
+    import { prefixStyle } from 'common/js/dom'
     import ProgressBar from 'base/progress-bar/progress-bar'
     import ProgressCircle from 'base/progress-circle/progress-circle'
-    import {playMode} from 'common/js/config'
+    import { playMode } from 'common/js/config'
     // import {shuffle} from 'common/js/util'
     import Lyric from 'lyric-parser'
     import Scroll from 'base/scroll/scroll'
     import Playlist from 'components/playlist/playlist'
-    import {playerMixin} from 'common/js/mixin'
-    import {ERR_OK} from 'api/config'
-    import {getMusic} from 'api/song'
+    import { playerMixin } from 'common/js/mixin'
+    import { ERR_OK } from 'api/config'
+    import { getMusic } from 'api/song'
     import Song from 'common/js/song'
     // import {updateUrl} from 'common/js/song'
 
@@ -222,16 +222,16 @@
                 this.setFullScreen(true)
             },
             enter(el, done) {
-                const {x, y, scale} = this._getPosAndScale()
-                let animation = {
+                const { x, y, scale } = this._getPosAndScale()
+                const animation = {
                     0: {
                         transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
                     },
                     60: {
-                        transform: `translate3d(0,0,0) scale(1.1})`
+                        transform: 'translate3d(0,0,0) scale(1.1})'
                     },
                     100: {
-                        transform: `translate3d(0,0,0) scale(1})`
+                        transform: 'translate3d(0,0,0) scale(1})'
                     }
                 }
                 animations.registerAnimation({
@@ -250,7 +250,7 @@
             },
             leave(el, done) {
                 this.$refs.cdWrapper.style.transition = 'all 0.4s'
-                const {x, y, scale} = this._getPosAndScale()
+                const { x, y, scale } = this._getPosAndScale()
                 this.$refs.cdWrapper.style[transform] = `translate3d(${x}px,${y}px,0) scale(${scale})`
                 this.$refs.cdWrapper.addEventListener('transitionend', done)
             },
@@ -346,12 +346,12 @@
             format(interval) {
                 // 等同于Math.floor(interval)
                 interval = interval | 0
-                let minute = this._pad(interval / 60 | 0)
-                let second = this._pad(interval % 60)
+                const minute = this._pad(interval / 60 | 0)
+                const second = this._pad(interval % 60)
                 return `${minute}:${second}`
             },
             onProgressBarChange(percent, type) {
-                let currentTime = this.currentSong.duration * percent
+                const currentTime = this.currentSong.duration * percent
                 if (type === 'end') {
                     this.$refs.audio.currentTime = currentTime
                     if (!this.playing) {
@@ -386,10 +386,10 @@
                     this.currentLineNum = 0
                 })
             },
-            handleLyric({lineNum, txt}) {
+            handleLyric({ lineNum, txt }) {
                 // console.log(lineNum)
                 this.currentLineNum = lineNum
-                let lineEl = this.$refs.lyricLine[lineNum - 5]
+                const lineEl = this.$refs.lyricLine[lineNum - 5]
                 if (lineNum > 5) {
                     this.$refs.lyricList.scrollToElement(lineEl, 1000)
                 } else {
@@ -532,14 +532,14 @@
                 }
             },
             async getUrl(mid) {
-                let res = await getMusic(mid, 0)
+                const res = await getMusic(mid, 0)
                 // let res2 = await getMusic(mid, 1)
                 let url, url2
                 if (res.code === ERR_OK) {
                     // console.log(res.data.items[0])
                     // updateUrl(this.currentSong, res.data.items[0])
                     // console.log(res)
-                    let musicDetail = res.data.items[0]
+                    const musicDetail = res.data.items[0]
                     url = `http://dl.stream.qqmusic.qq.com/${musicDetail.filename}?vkey=${musicDetail.vkey}&guid=5150825362&uin=0&fromtag=1`
                     // this.$refs.audio.src = url
                 }
